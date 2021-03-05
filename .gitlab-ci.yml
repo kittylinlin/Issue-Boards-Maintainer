@@ -1,0 +1,17 @@
+stages:
+  - deploy
+
+deploy:
+  tags:
+    - ec2
+  stage: deploy
+  script:
+    - cd functions/issue_boards_maintainer
+    - pip3 install -r requirements.txt -t .
+    - cd ../../cdk
+    - npm update -g aws-cdk
+    - pip3 install -r requirements.txt
+    - cdk bootstrap || true
+    - cdk deploy --require-approval never
+  only:
+    - master
